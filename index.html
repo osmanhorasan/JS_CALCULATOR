@@ -2,212 +2,43 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hesap Makinesi</title>
-  <style>
-    body {
-      background-color: blueviolet;
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      padding: 0;
-      margin: 0;
-    }
-
-    #main {
-      width: 100%;
-      background-color: black;
-      font-size: 4rem;
-      color: white;
-      position: relative;
-    }
-
-    form {
-      height: 100%;
-    }
-
-    .calc_footer {
-      height: 100%;
-    }
-
-    .calc_header {
-      display: flex;
-      flex-direction: column;
-      width: 93%;
-    }
-
-    input {
-      border: none;
-      font-size: calc(30px + 10.35vw);
-      background: none;
-      text-align: end;
-      color: white;
-    }
-
-    .btn_group {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
-      height:85%;
-      justify-items: center;
-      padding: 10px;
-    }
-
-    button {
-      width: calc(40px + 10.35vw);
-      height: calc(40px + 10.35vw);
-      border-radius: 50rem;
-      border: none;
-      cursor: pointer;
-      color: white;
-      background-color: #333;
-      transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
-      font-weight: bold;
-      font-size: calc(20px + 10.35vw);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn:hover {
-      transform: translate(-2px, -3px);
-      background-color: #999;
-    }
-
-    .btn-grey {
-      background-color: #999;
-      font-size: calc(1px + 5.35vw);
-
-    }
-
-    .btn-grey:hover {
-      background-color: white;
-      color: #333;
-    }
-
-
-    .btn-switch {
-      background-color: #f69906;
-    }
-
-    .btn-switch:hover {
-      background-color: orange;
-    }
-
-    .active {
-      background-color: crimson;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div id="main">
-    <form id="calc_form">
-      <div class="calc_header">
-        <input type="text" class="calc_output" name="" id="output" disabled value="0">
-      </div>
-      <div class="calc_footer">
-        <div class="btn_group">
-          <button class="btn btn-grey" data-type="clear" type="reset">AC</button>
-          <button class="btn btn-grey" data-type="operator" type="button" id="invert" value="invert">±</button>
-          <button class="btn btn-grey" data-type="operator" type="button" id="%" value="%">%</button>
-          <button class="btn btn-switch" data-type="operator" type="button" id="/" value="/">÷</button>
-
-          <button class="btn " data-type="operand" type="button" id="7" value="7">7</button>
-          <button class="btn " data-type="operand" type="button" id="8" value="8">8</button>
-          <button class="btn " data-type="operand" type="button" id="9" value="9">9</button>
-          <button class="btn btn-switch" data-type="operator" type="button" id="*" value="*">×</button>
-          <button class="btn " data-type="operand" type="button" id="4" value="4">4</button>
-          <button class="btn " data-type="operand" type="button" id="5" value="5">5</button>
-          <button class="btn " data-type="operand" type="button" id="6" value="6">6</button>
-          <button class="btn btn-switch" data-type="operator" type="button" id="−" value="−">−</button>
-          <button class="btn " data-type="operand" type="button" id="1" value="1">1</button>
-          <button class="btn " data-type="operand" type="button" id="2" value="2">2</button>
-          <button class="btn " data-type="operand" type="button" id="3" value="3">3</button>
-          <button class="btn btn-switch" data-type="operator" type="button" id="+" value="+">+</button>
-          <button class="btn " data-type="operand" type="button" id="0" value="0"
-            style="grid-column: span 2; width: 100%;">0</button>
-          <button class="btn " data-type="operand" type="button" id="." value=".">.</button>
-          <button class="btn btn-switch" data-type="operator" type="button" value="=">=</button>
-
+    <div class="container">
+        <div class="header">
+            <button onclick="aramaiki()"><i class="fa fa-list" aria-hidden="true"></i></button>
+            <button onclick="arama()"><i class="fa fa-search" aria-hidden="true"></i></button>
         </div>
-      </div>
-    </form>
-  </div>
-
-  <script>
-    const output = document.getElementById("output");
-    const form = document.getElementById("calc_form");
-    const operand_btns = document.querySelectorAll("button[data-type=operand]");
-
-    let is_operator = false;
-    operand_btns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        remove_active();
-        if (output.value == "0") {
-          output.value = e.target.value;
-        } else if (is_operator) {
-          is_operator = false;
-          output.value = e.target.value;
-        } else if (output.value.includes(".")) {
-          output.value = output.value + "" + e.target.value.replace(".", "");
-        } else {
-          output.value = output.value + "" + e.target.value;
-        }
-      });
-    });
-
-    const operator_btns = document.querySelectorAll("button[data-type=operator]");
-    let equation = [];
-    operator_btns.forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        console.log("e", e.target.value);
-        remove_active();
-        e.currentTarget.classList.add("active");
-
-        switch (e.target.value) {
-          case "%":
-            output.value = parseFloat(output.value) / 100;
-            break;
-          case "invert":
-            output.value = parseFloat(output.value) * -1;
-            break;
-          case "=":
-            console.log("www");
-            equation.push(output.value);
-            output.value = eval(equation.join(""));
-            equation = [];
-            break;
-          default:
-            let last_item = equation[equation.length - 1];
-            if (["/", "*", "+", "-"].includes(last_item) && is_operator) {
-              equation.pop();
-              equation.push(e.target.value);
-            } else {
-              equation.push(output.value);
-              equation.push(e.target.value);
-              output.value = ""
-
-            }
-            is_operator = true;
-            break;
-        }
-      });
-    });
-
-    const remove_active = () => {
-      operator_btns.forEach((btn) => {
-        btn.classList.remove("active");
-      });
-    };
+        <div class="content">
+            <div id="prog">
+                <img id="image" src="https://i.ytimg.com/vi/jVFj3Zf9sBI/maxresdefault.jpg" alt="">
+            </div>
+            <p id="title">How To Make A Music Player Using HTML CSS And JavaScript</p>
+            <audio controls="" id="audioPlayer" style="opacity: 0;">
+            </audio>
+        </div>
+        <div class="footer">
+            <button onclick="change(-1)"><i class="fa-solid fa-backward"></i></button>
+            <button onclick="playPause()"><i class="fa-solid fa-play active"></i></button>
+            <button onclick="change(1)"><i class="fa-solid fa-forward"></i></button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"
+        integrity="sha512-fD9DI5bZwQxOi7MhYWnnNPlvXdp/2Pj3XSTRrFs5FQa4mizyGLnJcN6tuvUS6LbmgN1ut+XGSABKvjN0H6Aoow=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
-  </script>
+    <div class="search" id="searchbox">
+        <input id="aramakutusu" type="text" value="" placeholder="müzik ara" oninput="aramayap()">
+        <div class="list" id="list"></div>
+    </div>
+    <script src="./js.js"></script>
 </body>
 
 </html>
