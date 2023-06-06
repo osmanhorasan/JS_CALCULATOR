@@ -7,9 +7,10 @@ let list = document.getElementById("list")
 let mImage = document.getElementById("image")
 let count = 3
 isPlaying = true
+let value = ""
 
-
-
+/* Play Button */
+const playButton = document.getElementById("playButton")
 
 const updateBackground = () => {
     const currentTime = player.currentTime;
@@ -26,17 +27,17 @@ const playPause = () => {
     isPlaying = !isPlaying
     isPlaying ? player.pause() : player.play()
     player.addEventListener('timeupdate', updateBackground);
-
+    playButton.innerHTML == "⏵" ? playButton.innerHTML= "⏸︎" : playButton.innerHTML = "⏵"
 }
 
 const input = document.getElementById("aramakutusu")
 const aramayap = () => {
     list.innerHTML = ""
-    const url = `https://itunes.apple.com/search?term=${input.value}`;
+    value = input.value
+    const url = `https://itunes.apple.com/search?term=${value}`;
     fetch(url)
         .then((Response) => Response.json())
         .then((data) => {
-            // console.log(data.results);
             const artists = data.results;
             mdata = artists;
             artists.map(result => {
@@ -48,12 +49,10 @@ const aramayap = () => {
                         searchBox.style.zIndex = "-1"
                         mTitle.textContent = result.collectionName;
                         mImage.src = result.artworkUrl100;
+                        input.value = ""
                     })
-
                     list.appendChild(title)
                 }
-
-
             })
         })
         .catch(error => console.log('Request failed:', error))
@@ -61,6 +60,7 @@ const aramayap = () => {
 
 const arama = () => {
     searchBox.style.zIndex = "1";
+    input.style.display = "block"
 }
 const aramaiki = () => {
     searchBox.style.zIndex = "1"

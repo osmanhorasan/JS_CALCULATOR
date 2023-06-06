@@ -5,6 +5,10 @@
     background-color: rgb(30, 29, 29);
 }
 
+#playButton {
+    font-size: 3.5rem;
+}
+
 .container {
     position: fixed;
     width: 100%;
